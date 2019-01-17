@@ -24,6 +24,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int tabsCount = 0;
   int doubleTabsCount = 0;
   int longPressCount = 0;
+  double positionX = 40.0;
+  double positionY = 60.0;
 
   @override
   Widget build(BuildContext context) {
@@ -47,30 +49,32 @@ class _MyHomePageState extends State<MyHomePage> {
             longPressCount++;
           });
         },
+        //vertical drag
+        onVerticalDragUpdate: (DragUpdateDetails value) {
+          setState(() {
+            positionY += value.delta.dy;
+          });
+        },
+        //vertical drag
+        onHorizontalDragUpdate: (DragUpdateDetails value) {
+          setState(() {
+            positionX += value.delta.dx;
+          });
+        },
+
         child: Stack(
           children: <Widget>[
             Positioned(
-              left: 50.0,
-              top: 50.0,
+              left: positionX,
+              top: positionY,
               child: Container(
                 width: 30.0,
                 height: 30.0,
                 decoration: BoxDecoration(
-                  color: Colors.lightBlue,
+                  color: Colors.greenAccent
                 ),
               ),
             ),
-            Positioned(
-              left: 90.0,
-              top: 50.0,
-              child: Container(
-                width: 30.0,
-                height: 30.0,
-                decoration: BoxDecoration(
-                  color: Colors.lightGreen,
-                ),
-              ),
-            )
           ],
         ),
       ),
@@ -78,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Padding(
         padding: EdgeInsets.all(20.0),
         child: Text(
-            "Tab: $tabsCount, double tap: $doubleTabsCount, long press: $longPressCount"),
+            "Tab: $tabsCount, double tap: $doubleTabsCount, long press: $longPressCount, x: $positionX, y:$positionY", ),
       )),
     );
   }
