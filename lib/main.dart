@@ -20,20 +20,50 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   int tabsCount = 0;
   int doubleTabsCount = 0;
   int longPressCount = 0;
   double positionX = 0.0;
   double positionY = 0.0;
-  double boxSizeX = 150.0;
-  double boxSizeY = 150.0;
+  double boxSizeX = 0.0;
+  double boxSizeY = 0.0;
+  double fullBoxSquareSize = 150.0;
+
+  AnimationController animationController;
+  Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    animationController = new AnimationController(
+        duration: const Duration(milliseconds: 20000), vsync: this);
+    animation =
+        CurvedAnimation(parent: animationController, curve: Curves.bounceInOut);
+
+    animation.addListener(() {
+      setState(() {
+        boxSizeX = fullBoxSquareSize * animation.value;
+        boxSizeY = fullBoxSquareSize * animation.value;
+      });
+      locateCenterBox(context);
+    });
+    animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (positionX == 0.0) {
-      locateCenterBox(context);
-    }
+    // if (positionX == 0.0) {
+    //   locateCenterBox(context);
+    // }
 
     return Scaffold(
       appBar: AppBar(
